@@ -9,16 +9,26 @@ import org.testng.annotations.Test;
 public class FormTest {
     
     @Test
-    public void testFormInput() {
+    public void testFormFieldInteraction() {
         WebDriver driver = new ChromeDriver();
-        driver.get("https://the-internet.herokuapp.com/login");
         
-        WebElement usernameInput = driver.findElement(By.id("username"));
-        usernameInput.clear();
-        usernameInput.sendKeys("tomsmith");
+        // ✅ Correct URL for form practice
+        driver.get("https://the-internet.herokuapp.com/inputs");
         
-        String value = usernameInput.getAttribute("value");
+        // ✅ Form field interaction (not login)
+        WebElement numberInput = driver.findElement(By.tagName("input"));
+        numberInput.clear();
+        numberInput.sendKeys("12345");
+        
+        String value = numberInput.getAttribute("value");
         System.out.println("Entered value: " + value);
+        
+        // ✅ Additional form interactions
+        numberInput.clear();
+        numberInput.sendKeys("67890");
+        
+        String newValue = numberInput.getAttribute("value");
+        System.out.println("New value: " + newValue);
         
         driver.quit();
     }
