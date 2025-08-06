@@ -29,7 +29,7 @@ public class UISimple001Test extends BaseTest {
         
         // Navigate to INPUTS page (not login page)
         String testUrl = "https://the-internet.herokuapp.com/inputs";
-        samplePage.navigateToSamplePage(testUrl);
+        samplePage.navigateToInputsPage(testUrl);
         
         // Verify page title
         String expectedTitle = "The Internet";
