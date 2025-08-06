@@ -14,21 +14,21 @@ import java.time.Duration;
 
 /**
  * UI Simple 001 Test Class following Intelli-Test framework
- * Demonstrates comprehensive UI automation testing
+ * Focuses on FORM FIELD INTERACTIONS as required by the project
  */
 public class UISimple001Test extends BaseTest {
     
     private SamplePage samplePage;
     
-    @Test(description = "Test basic form interaction and validation")
-    public void testBasicFormInteraction() {
-        System.out.println("🧪 Starting Basic Form Interaction Test");
+    @Test(description = "Test form field interactions and input validations")
+    public void testFormFieldInteractions() {
+        System.out.println("🧪 Starting Form Field Interactions Test");
         
         // Initialize page object
         samplePage = new SamplePage(driver);
         
-        // Navigate to test page
-        String testUrl = "https://the-internet.herokuapp.com/login";
+        // Navigate to INPUTS page (not login page)
+        String testUrl = "https://the-internet.herokuapp.com/inputs";
         samplePage.navigateToSamplePage(testUrl);
         
         // Verify page title
@@ -37,86 +37,75 @@ public class UISimple001Test extends BaseTest {
             "Page title should contain: " + expectedTitle);
         System.out.println("✅ Page title verified: " + driver.getTitle());
         
-        // Test form interaction
-        testFormElements();
+        // Test form field interactions
+        testInputFieldOperations();
         
-        // Test login functionality
-        testLoginFunctionality();
+        // Test form validation
+        testFormValidation();
         
-        // Test URL context
-        testUrlContext();
+        // Test URL context for inputs
+        testInputUrlContext();
         
-        System.out.println("✅ Basic Form Interaction Test completed successfully");
+        System.out.println("✅ Form Field Interactions Test completed successfully");
     }
     
-    @Test(description = "Test element interactions and validations")
-    public void testElementInteractions() {
-        System.out.println("🧪 Starting Element Interactions Test");
+    @Test(description = "Test input field operations and validations")
+    public void testInputFieldOperations() {
+        System.out.println("🧪 Starting Input Field Operations Test");
         
-        // Navigate to a form page
+        // Navigate to inputs page
         driver.get("https://the-internet.herokuapp.com/inputs");
         
-        // Find and interact with input elements
+        // Find input field
         WebElement numberInput = driver.findElement(By.tagName("input"));
         Assert.assertTrue(numberInput.isDisplayed(), "Number input should be displayed");
         
-        // Test input functionality
-        numberInput.clear();
-        numberInput.sendKeys("12345");
-        Assert.assertEquals(numberInput.getAttribute("value"), "12345", 
-            "Input value should match entered text");
+        // Test input field operations
+        testInputFieldClear(numberInput);
+        testInputFieldType(numberInput);
+        testInputFieldValueRetrieval(numberInput);
+        testInputFieldValidation(numberInput);
         
-        System.out.println("✅ Element Interactions Test completed successfully");
+        System.out.println("✅ Input Field Operations Test completed successfully");
     }
     
-    @Test(description = "Test business logic and form validation")
-    public void testBusinessLogic() {
-        System.out.println("🧪 Starting Business Logic Test");
+    @Test(description = "Test form validation and business logic")
+    public void testFormValidation() {
+        System.out.println("🧪 Starting Form Validation Test");
         
-        // Navigate to a page with business logic
-        driver.get("https://the-internet.herokuapp.com/dynamic_loading/1");
+        // Navigate to a form with validation
+        driver.get("https://the-internet.herokuapp.com/inputs");
         
-        // Test business logic - start button functionality
-        WebElement startButton = driver.findElement(By.xpath("//button[text()='Start']"));
-        Assert.assertTrue(startButton.isDisplayed(), "Start button should be displayed");
+        // Test form validation logic
+        WebElement inputField = driver.findElement(By.tagName("input"));
         
-        // Click start button
-        startButton.click();
-        System.out.println("🖱️ Clicked start button");
+        // Test different input scenarios
+        testNumericInput(inputField);
+        testTextInput(inputField);
+        testSpecialCharacterInput(inputField);
         
-        // Wait for loading to complete
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement finishElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.id("finish")));
-        
-        Assert.assertTrue(finishElement.isDisplayed(), "Finish element should be displayed after loading");
-        Assert.assertEquals(finishElement.getText(), "Hello World!", 
-            "Finish element should display correct text");
-        
-        System.out.println("✅ Business Logic Test completed successfully");
+        System.out.println("✅ Form Validation Test completed successfully");
     }
     
-    @Test(description = "Test URL context and navigation")
+    @Test(description = "Test URL context for form field project")
     public void testUrlContext() {
         System.out.println("🧪 Starting URL Context Test");
         
-        // Test URL navigation
+        // Test URL navigation for form field project
         String baseUrl = "https://the-internet.herokuapp.com";
         driver.get(baseUrl);
         
-        // Verify URL context
+        // Navigate to inputs page
+        driver.findElement(By.linkText("Inputs")).click();
+        Assert.assertTrue(driver.getCurrentUrl().contains("/inputs"), 
+            "Should navigate to inputs page");
+        
+        // Verify URL context for form field project
         String currentUrl = driver.getCurrentUrl();
         Assert.assertTrue(currentUrl.contains("the-internet.herokuapp.com"), 
             "URL should contain the expected domain");
-        
-        // Test navigation to different pages
-        driver.findElement(By.linkText("Form Authentication")).click();
-        Assert.assertTrue(driver.getCurrentUrl().contains("/login"), 
-            "Should navigate to login page");
-        
-        driver.navigate().back();
-        Assert.assertTrue(driver.getCurrentUrl().equals(baseUrl), 
-            "Should return to base URL");
+        Assert.assertTrue(currentUrl.contains("/inputs"), 
+            "URL should contain inputs path for form field project");
         
         System.out.println("✅ URL Context Test completed successfully");
     }
@@ -143,75 +132,171 @@ public class UISimple001Test extends BaseTest {
     }
     
     /**
-     * Test form elements interaction
+     * Test input field clear operation
      */
-    private void testFormElements() {
-        System.out.println("📝 Testing form elements...");
+    private void testInputFieldClear(WebElement inputField) {
+        System.out.println("🧹 Testing input field clear operation...");
         
-        // Find form elements
-        WebElement usernameField = driver.findElement(By.id("username"));
-        WebElement passwordField = driver.findElement(By.id("password"));
-        WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
+        // Clear the input field
+        inputField.clear();
+        Assert.assertEquals(inputField.getAttribute("value"), "", 
+            "Input field should be empty after clear");
         
-        // Verify elements are displayed
-        Assert.assertTrue(usernameField.isDisplayed(), "Username field should be displayed");
-        Assert.assertTrue(passwordField.isDisplayed(), "Password field should be displayed");
-        Assert.assertTrue(loginButton.isDisplayed(), "Login button should be displayed");
-        
-        // Test element interactions
-        usernameField.clear();
-        usernameField.sendKeys("tomsmith");
-        Assert.assertEquals(usernameField.getAttribute("value"), "tomsmith", 
-            "Username field should contain entered value");
-        
-        passwordField.clear();
-        passwordField.sendKeys("SuperSecretPassword!");
-        Assert.assertEquals(passwordField.getAttribute("value"), "SuperSecretPassword!", 
-            "Password field should contain entered value");
-        
-        System.out.println("✅ Form elements tested successfully");
+        System.out.println("✅ Input field clear operation tested successfully");
     }
     
     /**
-     * Test login functionality
+     * Test input field type operation
      */
-    private void testLoginFunctionality() {
-        System.out.println("🔐 Testing login functionality...");
+    private void testInputFieldType(WebElement inputField) {
+        System.out.println("⌨️ Testing input field type operation...");
         
-        // Perform login
-        WebElement usernameField = driver.findElement(By.id("username"));
-        WebElement passwordField = driver.findElement(By.id("password"));
-        WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
+        // Type in the input field
+        String testValue = "12345";
+        inputField.sendKeys(testValue);
+        Assert.assertEquals(inputField.getAttribute("value"), testValue, 
+            "Input field should contain typed value");
         
-        usernameField.clear();
-        usernameField.sendKeys("tomsmith");
-        passwordField.clear();
-        passwordField.sendKeys("SuperSecretPassword!");
-        loginButton.click();
-        
-        // Verify successful login
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement flashMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.className("flash")));
-        
-        Assert.assertTrue(flashMessage.getText().contains("You logged into a secure area!"), 
-            "Login should be successful");
-        
-        System.out.println("✅ Login functionality tested successfully");
+        System.out.println("✅ Input field type operation tested successfully");
     }
     
     /**
-     * Test URL context validation
+     * Test input field value retrieval
      */
-    private void testUrlContext() {
-        System.out.println("🌐 Testing URL context...");
+    private void testInputFieldValueRetrieval(WebElement inputField) {
+        System.out.println("📥 Testing input field value retrieval...");
+        
+        // Get the current value
+        String currentValue = inputField.getAttribute("value");
+        Assert.assertNotNull(currentValue, "Input field value should not be null");
+        
+        System.out.println("✅ Input field value retrieval tested successfully");
+    }
+    
+    /**
+     * Test input field validation
+     */
+    private void testInputFieldValidation(WebElement inputField) {
+        System.out.println("✅ Testing input field validation...");
+        
+        // Test if input field is enabled
+        Assert.assertTrue(inputField.isEnabled(), "Input field should be enabled");
+        
+        // Test if input field is displayed
+        Assert.assertTrue(inputField.isDisplayed(), "Input field should be displayed");
+        
+        System.out.println("✅ Input field validation tested successfully");
+    }
+    
+    /**
+     * Test numeric input scenarios
+     */
+    private void testNumericInput(WebElement inputField) {
+        System.out.println("🔢 Testing numeric input scenarios...");
+        
+        // Test positive numbers
+        inputField.clear();
+        inputField.sendKeys("123");
+        Assert.assertEquals(inputField.getAttribute("value"), "123", 
+            "Should accept positive numbers");
+        
+        // Test negative numbers
+        inputField.clear();
+        inputField.sendKeys("-456");
+        Assert.assertEquals(inputField.getAttribute("value"), "-456", 
+            "Should accept negative numbers");
+        
+        // Test decimal numbers
+        inputField.clear();
+        inputField.sendKeys("789.123");
+        Assert.assertEquals(inputField.getAttribute("value"), "789.123", 
+            "Should accept decimal numbers");
+        
+        System.out.println("✅ Numeric input scenarios tested successfully");
+    }
+    
+    /**
+     * Test text input scenarios
+     */
+    private void testTextInput(WebElement inputField) {
+        System.out.println("📝 Testing text input scenarios...");
+        
+        // Test alphabetic input
+        inputField.clear();
+        inputField.sendKeys("abc");
+        Assert.assertEquals(inputField.getAttribute("value"), "abc", 
+            "Should accept alphabetic input");
+        
+        // Test alphanumeric input
+        inputField.clear();
+        inputField.sendKeys("abc123");
+        Assert.assertEquals(inputField.getAttribute("value"), "abc123", 
+            "Should accept alphanumeric input");
+        
+        System.out.println("✅ Text input scenarios tested successfully");
+    }
+    
+    /**
+     * Test special character input
+     */
+    private void testSpecialCharacterInput(WebElement inputField) {
+        System.out.println("🔤 Testing special character input...");
+        
+        // Test special characters
+        inputField.clear();
+        inputField.sendKeys("!@#$%");
+        Assert.assertEquals(inputField.getAttribute("value"), "!@#$%", 
+            "Should accept special characters");
+        
+        System.out.println("✅ Special character input tested successfully");
+    }
+    
+    /**
+     * Test form field interactions
+     */
+    private void testInputFieldOperations() {
+        System.out.println("📝 Testing form field operations...");
+        
+        // Find input field
+        WebElement inputField = driver.findElement(By.tagName("input"));
+        
+        // Test basic operations
+        testInputFieldClear(inputField);
+        testInputFieldType(inputField);
+        testInputFieldValueRetrieval(inputField);
+        testInputFieldValidation(inputField);
+        
+        System.out.println("✅ Form field operations tested successfully");
+    }
+    
+    /**
+     * Test form validation
+     */
+    private void testFormValidation() {
+        System.out.println("✅ Testing form validation...");
+        
+        WebElement inputField = driver.findElement(By.tagName("input"));
+        
+        // Test various validation scenarios
+        testNumericInput(inputField);
+        testTextInput(inputField);
+        testSpecialCharacterInput(inputField);
+        
+        System.out.println("✅ Form validation tested successfully");
+    }
+    
+    /**
+     * Test URL context for inputs
+     */
+    private void testInputUrlContext() {
+        System.out.println("🌐 Testing URL context for inputs...");
         
         String currentUrl = driver.getCurrentUrl();
         Assert.assertTrue(currentUrl.contains("the-internet.herokuapp.com"), 
             "URL should contain expected domain");
-        Assert.assertTrue(currentUrl.contains("/secure_area"), 
-            "URL should contain secure area after login");
+        Assert.assertTrue(currentUrl.contains("/inputs"), 
+            "URL should contain inputs path for form field project");
         
-        System.out.println("✅ URL context tested successfully");
+        System.out.println("✅ URL context for inputs tested successfully");
     }
 } 
