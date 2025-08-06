@@ -7,121 +7,139 @@ import org.openqa.selenium.support.FindBy;
 
 /**
  * Sample page object following Intelli-Test framework
- * Demonstrates Page Object Model implementation
+ * Focuses ONLY on form field interactions (no login functionality)
  */
 public class SamplePage extends BasePage {
     
-    // Page elements using @FindBy annotation
-    @FindBy(id = "username")
-    private WebElement usernameField;
+    // Form field elements using @FindBy annotation
+    @FindBy(tagName = "input")
+    private WebElement inputField;
     
-    @FindBy(id = "password")
-    private WebElement passwordField;
+    @FindBy(id = "number-input")
+    private WebElement numberInput;
     
-    @FindBy(id = "login-button")
-    private WebElement loginButton;
+    @FindBy(id = "text-input")
+    private WebElement textInput;
     
-    @FindBy(id = "welcome-message")
-    private WebElement welcomeMessage;
-    
-    @FindBy(id = "submit-form")
-    private WebElement submitFormButton;
-    
-    @FindBy(id = "form-title")
-    private WebElement formTitle;
+    @FindBy(id = "form-field")
+    private WebElement formField;
     
     public SamplePage(WebDriver driver) {
         super(driver);
     }
     
     /**
-     * Navigate to the sample page
+     * Navigate to the inputs page
      * @param url The URL to navigate to
      */
-    public void navigateToSamplePage(String url) {
+    public void navigateToInputsPage(String url) {
         driver.get(url);
-        System.out.println("🌐 Navigated to sample page: " + url);
+        System.out.println("🌐 Navigated to inputs page: " + url);
     }
     
     /**
-     * Enter username
-     * @param username Username to enter
+     * Clear the input field
      */
-    public void enterUsername(String username) {
-        sendKeysToElement(usernameField, username);
-        System.out.println("👤 Entered username: " + username);
+    public void clearInputField() {
+        sendKeysToElement(inputField, "");
+        System.out.println("🧹 Cleared input field");
     }
     
     /**
-     * Enter password
-     * @param password Password to enter
+     * Type in the input field
+     * @param text Text to type
      */
-    public void enterPassword(String password) {
-        sendKeysToElement(passwordField, password);
-        System.out.println("🔒 Entered password");
+    public void typeInInputField(String text) {
+        sendKeysToElement(inputField, text);
+        System.out.println("⌨️ Typed in input field: " + text);
     }
     
     /**
-     * Click login button
+     * Get input field value
+     * @return Current value
      */
-    public void clickLoginButton() {
-        clickElement(loginButton);
-        System.out.println("🖱️ Clicked login button");
+    public String getInputFieldValue() {
+        return getElementText(inputField);
     }
     
     /**
-     * Get welcome message
-     * @return Welcome message text
-     */
-    public String getWelcomeMessage() {
-        return getElementText(welcomeMessage);
-    }
-    
-    /**
-     * Check if welcome message is displayed
+     * Check if input field is displayed
      * @return true if displayed, false otherwise
      */
-    public boolean isWelcomeMessageDisplayed() {
-        return isElementDisplayed(welcomeMessage);
+    public boolean isInputFieldDisplayed() {
+        return isElementDisplayed(inputField);
     }
     
     /**
-     * Click submit form button
+     * Test numeric input
+     * @param number Number to input
      */
-    public void clickSubmitForm() {
-        clickElement(submitFormButton);
-        System.out.println("📝 Submitted form");
+    public void testNumericInput(String number) {
+        clearInputField();
+        typeInInputField(number);
+        System.out.println("🔢 Tested numeric input: " + number);
     }
     
     /**
-     * Get form title
-     * @return Form title text
+     * Test text input
+     * @param text Text to input
      */
-    public String getFormTitle() {
-        return getElementText(formTitle);
+    public void testTextInput(String text) {
+        clearInputField();
+        typeInInputField(text);
+        System.out.println("📝 Tested text input: " + text);
     }
     
     /**
-     * Complete login process
-     * @param username Username to enter
-     * @param password Password to enter
+     * Test special character input
+     * @param specialChars Special characters to input
      */
-    public void performLogin(String username, String password) {
-        enterUsername(username);
-        enterPassword(password);
-        clickLoginButton();
-        System.out.println("✅ Login process completed");
+    public void testSpecialCharacterInput(String specialChars) {
+        clearInputField();
+        typeInInputField(specialChars);
+        System.out.println("🔤 Tested special character input: " + specialChars);
     }
     
     /**
-     * Fill and submit form
-     * @param username Username for form
-     * @param password Password for form
+     * Validate input field functionality
      */
-    public void fillAndSubmitForm(String username, String password) {
-        enterUsername(username);
-        enterPassword(password);
-        clickSubmitForm();
-        System.out.println("✅ Form filled and submitted");
+    public void validateInputField() {
+        // Test basic operations
+        clearInputField();
+        typeInInputField("test123");
+        
+        // Verify value
+        String currentValue = getInputFieldValue();
+        System.out.println("✅ Input field validation completed. Current value: " + currentValue);
+    }
+    
+    /**
+     * Test form field operations
+     */
+    public void testFormFieldOperations() {
+        System.out.println("📝 Testing form field operations...");
+        
+        // Test various input scenarios
+        testNumericInput("12345");
+        testTextInput("abc");
+        testSpecialCharacterInput("!@#$%");
+        
+        System.out.println("✅ Form field operations completed");
+    }
+    
+    /**
+     * Get page title
+     * @return Page title
+     */
+    public String getPageTitle() {
+        return driver.getTitle();
+    }
+    
+    /**
+     * Get current URL
+     * @return Current URL
+     */
+    public String getCurrentUrl() {
+        return driver.getCurrentUrl();
     }
 } 
